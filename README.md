@@ -1,17 +1,5 @@
-# Theju's Little Recovery Corner — V2
+# Theju's Little Recovery Corner V3
 
-This version is rebuilt to closely match the visual storyboard:
-- pastel pink/cream cards
-- illustrated-style recovery scenes
-- girl + cat compositions using CSS/emoji artwork
-- prescription card
-- heart-catching game
-- comfort section
-- six smile cards
-- dark moon/night rest scene
-- floating petals and transition animations
+Storyboard-matched version with local vector illustrations and a working post-game Continue button.
 
-Open `index.html` directly or serve the folder with:
-`python -m http.server 8000`
-
-The "prescription" copy is intentionally playful and is not medical diagnosis or treatment.
+Open index.html directly or run: python -m http.server 8000
