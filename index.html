@@ -80,8 +80,9 @@
   <p class="sub">Tap the button for a dose of happiness!</p>
 
   <div class="rx-card">
-    <!-- Overwritten by the first shuffle-bag draw on load; this is the no-JS fallback. -->
-    <p id="rxText" aria-live="polite">I'm worried about you, and I'm not very good at hiding it.</p>
+    <!-- Must match PRESCRIPTIONS[0] in script.js — this is what shows before
+         JS runs, so any mismatch flashes the wrong dose on load. -->
+    <p id="rxText" aria-live="polite">I can't see those beautiful eyes turning red, and that smile hiding under a mask.</p>
   </div>
 
   <p class="rest-mode">
@@ -137,7 +138,7 @@
     Close your eyes.<br>
     Take a slow breath.<br>
     You don't have to do anything tonight.<br>
-    Just rest and let yourself get better. ♡
+    Just rest and let yourself get better, dii. ♡
   </p>
 
   <!-- A slow breathing circle — paces her to ~4s in, 4s out -->

@@ -3,22 +3,23 @@
    ═══════════════════════════════════════════════════════════ */
 
 const HER_NAME   = 'Theju';
-const NICKNAME   = 'Rakshashi';    // the teasing one — change the spelling here only
+const NICKNAME   = 'Rakshashi';    // the teasing one, used where you're joking
+const PET_NAME   = 'dii';          // the soft one, used where you're being gentle
 const SICK_START = '2026-09-14';   // the day she got sick, YYYY-MM-DD
 const RECOVERY_DAYS = 7;           // the arc the "Good Health Loading" bar fills over
 
 // Screen 3 — the prescription doses.
-// She'll see every one of these before any repeats, so they can carry weight.
+// Shown in exactly this order, one per tap, wrapping back to the top at the end.
+// Reorder this list to change the sequence she reads them in.
 const PRESCRIPTIONS = [
   "I can't see those beautiful eyes turning red, and that smile hiding under a mask.",
   "Tell me honestly how you're feeling. Not the \"I'm fine\" version. The real one.",
   "I wish I could take this from you and carry it myself for a day.",
   "I'm worried about you. That's not me being dramatic, that's just where my head is.",
-  "If it gets worse tonight, wake me up. I mean it. Any hour.",
-  "I don't need you to be okay right now. I just need you to let yourself heal.",
+  `I don't need you to be okay right now, ${PET_NAME}. I just need you to let yourself heal.`,
   "Drink water. Take the medicine. Text me when you've done both.",
-  "Your favourite hobby is pushing me into trauma — and I'd take a hundred rounds of it over one more day of you like this.",
   "Every time my phone lights up I hope it's you saying you feel better.",
+  "Your favourite hobby is pushing me into trauma — and I'd take a hundred rounds of it over one more day of you like this.",
   `Get well soon, ${NICKNAME}. Nobody has terrorised me in days and I don't like it.`,
 ];
 
@@ -67,51 +68,27 @@ const $$ = (sel) => Array.from(document.querySelectorAll(sel));
  * Runs first, before anything is bound.
  */
 function renameAll() {
-  const swaps = [['Theju', HER_NAME], ['Rakshashi', NICKNAME]]
-    .filter(([placeholder, value]) => placeholder !== value);
+  const swaps = [['Theju', HER_NAME], ['Rakshashi', NICKNAME], ['dii', PET_NAME]]
+    .filter(([placeholder, value]) => placeholder !== value)
+    // Whole words only. "dii" is three lowercase letters — a plain substring
+    // swap would happily rewrite it inside some unrelated word later on.
+    .map(([placeholder, value]) => [new RegExp(`\\b${placeholder}\\b`, 'g'), value]);
   if (!swaps.length) return;
 
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   for (let n = walker.nextNode(); n; n = walker.nextNode()) {
-    for (const [placeholder, value] of swaps) {
-      if (n.nodeValue.includes(placeholder)) {
-        n.nodeValue = n.nodeValue.replaceAll(placeholder, value);
+    for (const [pattern, value] of swaps) {
+      if (pattern.test(n.nodeValue)) {
+        pattern.lastIndex = 0;                      // /g regexes carry state
+        n.nodeValue = n.nodeValue.replace(pattern, value);
       }
+      pattern.lastIndex = 0;
     }
   }
 }
 
 renameAll();
 document.title = `${HER_NAME}'s Little Recovery Corner 💗`;
-
-/**
- * A "shuffle bag": deals every item once in random order before any repeats.
- *
- * Plain random picking feels broken here — you'd still expect a repeat within
- * a handful of taps, which reads as "it's glitching" rather than "it's random".
- * Dealing from a shuffled deck guarantees she reads them all before any twice.
- */
-function makeShuffleBag(items) {
-  let bag = [];
-  let last = null;
-
-  return function draw() {
-    if (bag.length === 0) {
-      bag = items.slice();
-      for (let i = bag.length - 1; i > 0; i--) {          // Fisher–Yates
-        const j = Math.floor(Math.random() * (i + 1));
-        [bag[i], bag[j]] = [bag[j], bag[i]];
-      }
-      // A reshuffle can deal the same item she just saw, straddling the seam.
-      // Swap it away from the top so the back-to-back repeat never shows.
-      if (bag.length > 1 && bag[bag.length - 1] === last) {
-        [bag[0], bag[bag.length - 1]] = [bag[bag.length - 1], bag[0]];
-      }
-    }
-    last = bag.pop();
-    return last;
-  };
-}
 
 /* ── Screen manager ─────────────────────────────────────── */
 
@@ -196,14 +173,17 @@ onEnter.s2 = () => {
 /* ── Screen 3 · Prescription ────────────────────────────── */
 
 const rxText = $('#rxText');
-const drawPrescription = makeShuffleBag(PRESCRIPTIONS);
 
-// The card starts on the first dose, so retire it from the opening deal —
-// otherwise her first tap can hand straight back what she's already reading.
-rxText.textContent = drawPrescription();
+// Straight through the list in order, wrapping at the end.
+let rxIndex = 0;
+rxText.textContent = PRESCRIPTIONS[0];
 
 $('#rxBtn').addEventListener('click', () => {
-  const next = drawPrescription();
+  // Advance immediately rather than inside the timeout, so a fast double-tap
+  // moves two doses forward instead of racing on a stale index.
+  rxIndex = (rxIndex + 1) % PRESCRIPTIONS.length;
+  const next = PRESCRIPTIONS[rxIndex];
+
   rxText.classList.add('fading');
   setTimeout(() => {
     rxText.textContent = next;
