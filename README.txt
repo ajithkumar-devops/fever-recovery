@@ -1,0 +1,1 @@
+SELF-CONTAINED: only index.html is required. All artwork is embedded. Deploy with index.html at the Vercel project root.
