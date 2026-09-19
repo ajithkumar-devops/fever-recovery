@@ -3,9 +3,9 @@
    ═══════════════════════════════════════════════════════════ */
 
 const HER_NAME   = 'Theju';
+const NICKNAME   = 'Rakshashi';    // the teasing one — change the spelling here only
 const SICK_START = '2026-09-14';   // the day she got sick, YYYY-MM-DD
 const RECOVERY_DAYS = 7;           // the arc the "Good Health Loading" bar fills over
-const GAME_SECONDS  = 30;
 
 // Screen 3 — the prescription doses.
 // She'll see every one of these before any repeats, so they can carry weight.
@@ -19,9 +19,10 @@ const PRESCRIPTIONS = [
   "Drink water. Take the medicine. Text me when you've done both.",
   "Your favourite hobby is pushing me into trauma — and I'd take a hundred rounds of it over one more day of you like this.",
   "Every time my phone lights up I hope it's you saying you feel better.",
+  `Get well soon, ${NICKNAME}. Nobody has terrorised me in days and I don't like it.`,
 ];
 
-// Screen 7 — six cards, each with a fixed pair: what she sees, and the
+// Screen 5 — six cards, each with a fixed pair: what she sees, and the
 // punchline hidden underneath it. Nothing is shuffled; card 1 always holds
 // pair 1. Tapping toggles between the two, so she can always get back.
 // Array order = grid order. The card colours and icons stay where they are.
@@ -48,7 +49,7 @@ const CARDS = [
   },
   {
     front: "I have been undefeated in arguments for days now. It's boring.",
-    back:  "Winning against nobody is just talking to myself. Come back.",
+    back:  `Winning against nobody is just talking to myself. Come back, ${NICKNAME}.`,
   },
 ];
 
@@ -60,31 +61,35 @@ const $  = (sel) => document.querySelector(sel);
 const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 
 /**
- * Swap the placeholder name throughout the markup.
+ * Swap the placeholder names throughout the markup.
  * Walks text nodes rather than rewriting innerHTML — an innerHTML swap would
  * rebuild every element and silently drop the listeners wired up below.
  * Runs first, before anything is bound.
  */
-function renameTo(newName, placeholder = 'Theju') {
-  if (newName === placeholder) return;
+function renameAll() {
+  const swaps = [['Theju', HER_NAME], ['Rakshashi', NICKNAME]]
+    .filter(([placeholder, value]) => placeholder !== value);
+  if (!swaps.length) return;
+
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   for (let n = walker.nextNode(); n; n = walker.nextNode()) {
-    if (n.nodeValue.includes(placeholder)) {
-      n.nodeValue = n.nodeValue.replaceAll(placeholder, newName);
+    for (const [placeholder, value] of swaps) {
+      if (n.nodeValue.includes(placeholder)) {
+        n.nodeValue = n.nodeValue.replaceAll(placeholder, value);
+      }
     }
   }
 }
 
-renameTo(HER_NAME);
+renameAll();
 document.title = `${HER_NAME}'s Little Recovery Corner 💗`;
 
 /**
  * A "shuffle bag": deals every item once in random order before any repeats.
  *
- * Plain random picking feels broken here — with 16 doses you'd still expect to
- * see a repeat within about five taps, which reads as "it's glitching" rather
- * than "it's random". Dealing from a shuffled deck guarantees she reads all of
- * them before seeing any twice.
+ * Plain random picking feels broken here — you'd still expect a repeat within
+ * a handful of taps, which reads as "it's glitching" rather than "it's random".
+ * Dealing from a shuffled deck guarantees she reads them all before any twice.
  */
 function makeShuffleBag(items) {
   let bag = [];
@@ -107,17 +112,6 @@ function makeShuffleBag(items) {
     return last;
   };
 }
-
-/** localStorage throws in some private-browsing modes — never let that kill the page. */
-const store = {
-  get(key, fallback) {
-    try { const v = localStorage.getItem(key); return v === null ? fallback : v; }
-    catch { return fallback; }
-  },
-  set(key, value) {
-    try { localStorage.setItem(key, String(value)); } catch { /* fine, just won't persist */ }
-  },
-};
 
 /* ── Screen manager ─────────────────────────────────────── */
 
@@ -217,104 +211,7 @@ $('#rxBtn').addEventListener('click', () => {
   }, 300);                                                 // matches the CSS transition
 });
 
-/* ── Screen 4 · Catch the Hearts ────────────────────────── */
-
-const arena = $('#arena');
-const HEARTS = ['💗', '💖', '❤️', '💕'];
-
-const game = { running: false, score: 0, left: GAME_SECONDS, tick: null, spawn: null };
-
-$('#statBest').textContent = store.get('theju.best', '0');
-
-function fmtTime(s) {
-  return `00:${String(Math.max(0, s)).padStart(2, '0')}`;
-}
-
-function spawnHeart() {
-  const b = document.createElement('button');
-  b.type = 'button';
-  b.className = 'pop';
-  b.textContent = HEARTS[Math.floor(Math.random() * HEARTS.length)];
-  b.setAttribute('aria-label', 'Catch heart');
-
-  // Inset from the edges so a heart never lands half-off the arena.
-  b.style.left = `${8 + Math.random() * 76}%`;
-  b.style.top  = `${10 + Math.random() * 72}%`;
-
-  const remove = () => b.remove();
-  const life = setTimeout(remove, 1150);
-
-  b.addEventListener('click', (e) => {
-    e.stopPropagation();                                   // don't re-trigger arena start
-    if (!game.running) return;
-    clearTimeout(life);
-    b.classList.add('caught');
-    setTimeout(remove, 300);
-    game.score += 1;
-    $('#statScore').textContent = game.score;
-  });
-
-  arena.appendChild(b);
-}
-
-function endGame() {
-  game.running = false;
-  clearInterval(game.tick);
-  clearInterval(game.spawn);
-  arena.classList.remove('running');
-  $$('.pop').forEach((p) => p.remove());
-  $('#arenaStart').textContent = 'Tap to play again 💗';
-
-  const best = Math.max(game.score, Number(store.get('theju.best', 0)) || 0);
-  store.set('theju.best', best);
-  $('#statBest').textContent = best;
-
-  $('#resultLine').innerHTML = game.score === 0
-    ? `No hearts this time — but you showed up, and that counts. ♡`
-    : `You caught <b>${game.score}</b> heart${game.score === 1 ? '' : 's'}!<br>That's amazing! ♥`;
-
-  goto('s5');
-}
-
-function startGame() {
-  if (game.running) return;
-  game.running = true;
-  game.score = 0;
-  game.left = GAME_SECONDS;
-
-  arena.classList.add('running');
-  $('#statScore').textContent = '0';
-  $('#statTime').textContent = fmtTime(game.left);
-
-  game.tick = setInterval(() => {
-    game.left -= 1;
-    $('#statTime').textContent = fmtTime(game.left);
-    if (game.left <= 0) endGame();
-  }, 1000);
-
-  game.spawn = setInterval(spawnHeart, 620);
-  spawnHeart();
-}
-
-arena.addEventListener('click', startGame);
-
-onEnter.s4 = () => {
-  $('#statTime').textContent = fmtTime(GAME_SECONDS);
-  $('#statScore').textContent = '0';
-};
-
-// Leaving the game screen mid-round must not leave timers running in the background.
-$('#skipGame').addEventListener('click', () => {
-  if (game.running) {
-    game.running = false;
-    clearInterval(game.tick);
-    clearInterval(game.spawn);
-    arena.classList.remove('running');
-    $$('.pop').forEach((p) => p.remove());
-  }
-});
-
-/* ── Screen 7 · Smile cards ─────────────────────────────── */
+/* ── Screen 5 · Smile cards ─────────────────────────────── */
 
 $$('.smile').forEach((card, i) => {
   const pair = CARDS[i];

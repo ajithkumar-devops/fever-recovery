@@ -35,12 +35,6 @@ body[data-theme="sunset"] {
   --ink-soft: #7A5E7E;
 }
 
-body[data-theme="sky"] {
-  --bg:       #DCE9FA;
-  --ink:      #2E3A59;
-  --ink-soft: #6B7694;
-}
-
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 html, body {
@@ -79,11 +73,6 @@ body[data-theme="night"]::before {
 body[data-theme="sunset"]::before {
   background: linear-gradient(180deg,
     #B88BC4 0%, #E9A0A8 38%, #F7C79A 68%, #FADFC0 100%);
-  opacity: 1;
-}
-
-body[data-theme="sky"]::before {
-  background: linear-gradient(180deg, #BFD9F7 0%, #DCC9EE 60%, #F6D6E4 100%);
   opacity: 1;
 }
 
@@ -349,108 +338,7 @@ body[data-theme="sunset"] .art { background: rgba(255, 255, 255, 0.16); }
 
 .rest-mode b { color: #37A06E; }
 
-/* ── 4 · Game ─────────────────────────────────────────── */
-.stats { display: flex; gap: 10px; margin: 16px 0 14px; }
-
-.stat {
-  flex: 1;
-  background: #FFE5EC;
-  border-radius: 14px;
-  padding: 9px 4px;
-  box-shadow: var(--shadow);
-}
-
-.stat.alt  { background: #FFF6D8; }
-.stat.alt2 { background: #EFE4FB; }
-
-.stat span {
-  display: block;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--navy-sf);
-  letter-spacing: 0.04em;
-}
-
-.stat b {
-  display: block;
-  font-size: 1.22rem;
-  font-family: 'Baloo 2', sans-serif;
-  color: var(--navy);
-}
-
-.arena {
-  position: relative;
-  height: min(58vh, 420px);
-  border-radius: 22px;
-  overflow: hidden;
-  background:
-    radial-gradient(38% 22% at 22% 26%, rgba(255,255,255,0.55), transparent 70%),
-    radial-gradient(30% 18% at 76% 44%, rgba(255,255,255,0.45), transparent 70%),
-    linear-gradient(180deg, #7FB3F2 0%, #B79AE8 52%, #F5A9C8 100%);
-  box-shadow: var(--shadow);
-  cursor: pointer;
-  touch-action: manipulation;
-}
-
-.arena-start {
-  position: absolute;
-  inset: 0;
-  margin: 0;
-  display: grid;
-  place-items: center;
-  font-family: 'Baloo 2', sans-serif;
-  font-size: 1.2rem;
-  color: #fff;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-  background: rgba(46, 58, 89, 0.18);
-  z-index: 2;
-}
-
-.arena.running .arena-start { display: none; }
-
-.arena-cheer {
-  position: absolute;
-  right: 12px;
-  bottom: 10px;
-  margin: 0;
-  font-family: 'Caveat', cursive;
-  font-size: 1.15rem;
-  color: #fff;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
-
-/* Spawned by JS */
-.pop {
-  position: absolute;
-  border: none;
-  background: none;
-  padding: 0;
-  font-size: 2.1rem;
-  line-height: 1;
-  cursor: pointer;
-  animation: pop-in 0.22s ease-out both;
-  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.22));
-}
-
-.pop.caught { animation: caught 0.3s ease-out forwards; pointer-events: none; }
-
-@keyframes pop-in { from { transform: scale(0.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-@keyframes caught { to { transform: scale(2) translateY(-24px); opacity: 0; } }
-
-/* ── 5 · Result ───────────────────────────────────────── */
-.quote {
-  font-family: 'Caveat', cursive;
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: var(--ink);
-  background: var(--card);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 20px 18px;
-  margin: 0 0 20px;
-}
-
-/* ── 6 · Wishlist ─────────────────────────────────────── */
+/* ── 4 · Wishlist ─────────────────────────────────────── */
 .wishlist {
   list-style: none;
   padding: 0;
@@ -496,7 +384,7 @@ body[data-theme="sunset"] .art { background: rgba(255, 255, 255, 0.16); }
   margin: 0 0 4px;
 }
 
-/* ── 7 · Smile cards ──────────────────────────────────── */
+/* ── 5 · Smile cards ──────────────────────────────────── */
 .cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -562,7 +450,7 @@ body[data-theme="sunset"] .art { background: rgba(255, 255, 255, 0.16); }
 .c-green  { background: #DFF3E5; }
 .c-purple { background: #ECE3FA; }
 
-/* ── 8 · Breathing circle ─────────────────────────────── */
+/* ── 6 · Breathing circle ─────────────────────────────── */
 .breathe {
   width: 130px;
   height: 130px;
@@ -587,7 +475,7 @@ body[data-theme="sunset"] .art { background: rgba(255, 255, 255, 0.16); }
   50%      { transform: scale(1.12); }
 }
 
-/* ── 9 · Heartbeat ────────────────────────────────────── */
+/* ── 7 · Heartbeat ────────────────────────────────────── */
 .beat {
   font-size: 4.4rem;
   line-height: 1;
