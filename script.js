@@ -21,24 +21,10 @@ const PRESCRIPTIONS = [
   "Every time my phone lights up I hope it's you saying you feel better.",
 ];
 
-// Screen 7 — the smile cards.
-// More messages than cards (6), so a tap can always find something new.
+// Screen 7 — the six cards, shown all at once in this exact order.
+// Not tappable and not shuffled: exactly six messages for exactly six cards.
+// Reorder this list to reorder the grid; the card colours stay put.
 const SMILES = [
-  "You're stronger than this ♡",
-  "Coughs are temporary, but your smile is permanent. ♡",
-  "You're doing your best, and that's enough. ♡",
-  "No overthinking. Doctor's orders. 😊",
-  "Your rest today is a brighter you tomorrow. ♡",
-  "Proud of you for taking care of yourself. ♡",
-  "I'm thinking about you right now. ♡",
-  "One slow day at a time. That's all. ♡",
-  "You're allowed to do absolutely nothing. ♡",
-  "I miss you being annoying. Come back. ♡",
-  "This will pass. I'll still be here after. ♡",
-  "Go back to sleep. I'll wait. ♡",
-
-  // The "waiting" running joke — keep adding to this, it's the funniest seam.
-  "New Heartbeat episodes are waiting. They are not going to watch themselves.",
   "The chocolates are waiting. I am guarding them. Barely.",
   "Your toys are waiting. Two of them asked about you.",
   "The whole world is waiting for you. (I am the whole world. Obviously.)",
@@ -311,36 +297,9 @@ $('#skipGame').addEventListener('click', () => {
 
 /* ── Screen 7 · Smile cards ─────────────────────────────── */
 
-const smileCards = $$('.smile');
-
-/**
- * What each card is committed to showing.
- *
- * Deliberately NOT read from the DOM: the new text only lands after the 250ms
- * fade, so two cards tapped in quick succession would both read the same stale
- * text and could pick the same replacement. Committing here, synchronously on
- * click, closes that window.
- */
-const assigned = smileCards.map((_, i) => SMILES[i] || 'Tap me');
-
-smileCards.forEach((card, i) => {
-  const txt = card.querySelector('.txt');
-  txt.textContent = assigned[i];
-
-  card.addEventListener('click', () => {
-    const spare = SMILES.filter((m) => !assigned.includes(m));
-    // If the pool is ever exhausted, fall back to any other message rather
-    // than freezing the card on its current one.
-    const pool = spare.length ? spare : SMILES.filter((m) => m !== assigned[i]);
-    const next = pool[Math.floor(Math.random() * pool.length)];
-    assigned[i] = next;
-
-    txt.classList.add('fading');
-    setTimeout(() => {
-      txt.textContent = next;
-      txt.classList.remove('fading');
-    }, 250);
-  });
+// Fill each card once, in order. No listeners — the cards are read-only now.
+$$('.smile').forEach((card, i) => {
+  card.querySelector('.txt').textContent = SMILES[i] || '';
 });
 
 /* ── Go ─────────────────────────────────────────────────── */

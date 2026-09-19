@@ -149,16 +149,18 @@
 <!-- ══ 7 · Smile cards ═════════════════════════════════ -->
 <section class="screen" id="s7" data-theme="blush" aria-label="Need a little smile">
   <h2 class="title">Need a Little Smile?</h2>
-  <p class="sub">Tap a card for a random message!</p>
+  <p class="sub">A few things that are waiting for you. ♡</p>
 
-  <div class="cards" id="cards">
-    <button class="smile c-pink"   type="button"><span class="ico">🌸</span><span class="txt">Tap me</span></button>
-    <button class="smile c-yellow" type="button"><span class="ico">💛</span><span class="txt">Tap me</span></button>
-    <button class="smile c-peach"  type="button"><span class="ico">🌞</span><span class="txt">Tap me</span></button>
-    <button class="smile c-mint"   type="button"><span class="ico">🙂</span><span class="txt">Tap me</span></button>
-    <button class="smile c-green"  type="button"><span class="ico">🌿</span><span class="txt">Tap me</span></button>
-    <button class="smile c-purple" type="button"><span class="ico">🌈</span><span class="txt">Tap me</span></button>
-  </div>
+  <!-- Static cards — the text is filled from SMILES in script.js, in this order.
+       Plain divs, not buttons: nothing here is tappable any more. -->
+  <ul class="cards" id="cards">
+    <li class="smile c-pink"><span class="ico" aria-hidden="true">🍫</span><span class="txt"></span></li>
+    <li class="smile c-yellow"><span class="ico" aria-hidden="true">🧸</span><span class="txt"></span></li>
+    <li class="smile c-peach"><span class="ico" aria-hidden="true">🌍</span><span class="txt"></span></li>
+    <li class="smile c-mint"><span class="ico" aria-hidden="true">📝</span><span class="txt"></span></li>
+    <li class="smile c-green"><span class="ico" aria-hidden="true">🙃</span><span class="txt"></span></li>
+    <li class="smile c-purple"><span class="ico" aria-hidden="true">🏆</span><span class="txt"></span></li>
+  </ul>
 
   <button class="cta" data-goto="s8">Next →</button>
 </section>

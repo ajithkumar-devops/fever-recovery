@@ -502,6 +502,8 @@ body[data-theme="sunset"] .art { background: rgba(255, 255, 255, 0.16); }
   grid-template-columns: 1fr 1fr;
   gap: 12px;
   margin: 20px 0;
+  list-style: none;     /* it's a <ul> — clear the markers and indent */
+  padding: 0;
 }
 
 .smile {
@@ -515,13 +517,9 @@ body[data-theme="sunset"] .art { background: rgba(255, 255, 255, 0.16); }
   align-items: center;
   justify-content: center;
   gap: 8px;
-  cursor: pointer;
   box-shadow: var(--shadow);
   color: var(--navy);
-  transition: transform 0.18s ease;
 }
-
-.smile:active { transform: scale(0.96); }
 
 .smile .ico { background: rgba(255, 255, 255, 0.7); }
 
@@ -529,10 +527,7 @@ body[data-theme="sunset"] .art { background: rgba(255, 255, 255, 0.16); }
   font-size: 0.85rem;
   font-weight: 600;
   line-height: 1.4;
-  transition: opacity 0.25s ease;
 }
-
-.smile .txt.fading { opacity: 0; }
 
 .c-pink   { background: #FFE0EA; }
 .c-yellow { background: #FFF3D6; }
