@@ -21,16 +21,35 @@ const PRESCRIPTIONS = [
   "Every time my phone lights up I hope it's you saying you feel better.",
 ];
 
-// Screen 7 — the six cards, shown all at once in this exact order.
-// Not tappable and not shuffled: exactly six messages for exactly six cards.
-// Reorder this list to reorder the grid; the card colours stay put.
-const SMILES = [
-  "The chocolates are waiting. I am guarding them. Barely.",
-  "Your toys are waiting. Two of them asked about you.",
-  "The whole world is waiting for you. (I am the whole world. Obviously.)",
-  "Your pending arguments with me are waiting. I've kept a list. It's long.",
-  "The trauma you keep pushing me into is also waiting. Very patiently.",
-  "I have been undefeated in arguments for days now. It's boring. Please come back.",
+// Screen 7 — six cards, each with a fixed pair: what she sees, and the
+// punchline hidden underneath it. Nothing is shuffled; card 1 always holds
+// pair 1. Tapping toggles between the two, so she can always get back.
+// Array order = grid order. The card colours and icons stay where they are.
+const CARDS = [
+  {
+    front: "The chocolates are waiting. I am guarding them. Barely.",
+    back:  "I'm off sugar, so all of them are yours. The restraint is killing me.",
+  },
+  {
+    front: "Your toys are waiting. Two of them asked about you.",
+    back:  "I told them you're resting. They did not believe me.",
+  },
+  {
+    front: "The whole world is waiting for you. (I am the whole world. Obviously.)",
+    back:  "The world is getting impatient. The world misses you.",
+  },
+  {
+    front: "Your pending arguments with me are waiting. I've kept a list. It's long.",
+    back:  "You'll probably win all of them. I've made peace with it.",
+  },
+  {
+    front: "The trauma you keep pushing me into is also waiting. Very patiently.",
+    back:  "It says take your time. I say the same, but less patiently.",
+  },
+  {
+    front: "I have been undefeated in arguments for days now. It's boring.",
+    back:  "Winning against nobody is just talking to myself. Come back.",
+  },
 ];
 
 /* ═══════════════════════════════════════════════════════════
@@ -297,9 +316,31 @@ $('#skipGame').addEventListener('click', () => {
 
 /* ── Screen 7 · Smile cards ─────────────────────────────── */
 
-// Fill each card once, in order. No listeners — the cards are read-only now.
 $$('.smile').forEach((card, i) => {
-  card.querySelector('.txt').textContent = SMILES[i] || '';
+  const pair = CARDS[i];
+  if (!pair) return;                                    // more cards than pairs: leave blank
+
+  const txt  = card.querySelector('.txt');
+  const hint = card.querySelector('.hint');
+  let showingBack = false;
+
+  txt.textContent = pair.front;
+
+  card.addEventListener('click', () => {
+    showingBack = !showingBack;
+
+    // Flip state is committed immediately; only the paint waits for the fade,
+    // so a fast double-tap can't land the card on the wrong face.
+    card.classList.toggle('flipped', showingBack);
+    card.setAttribute('aria-pressed', String(showingBack));
+    hint.textContent = showingBack ? '↩ back' : 'tap ♡';
+
+    txt.classList.add('fading');
+    setTimeout(() => {
+      txt.textContent = showingBack ? pair.back : pair.front;
+      txt.classList.remove('fading');
+    }, 200);
+  });
 });
 
 /* ── Go ─────────────────────────────────────────────────── */

@@ -519,6 +519,20 @@ body[data-theme="sunset"] .art { background: rgba(255, 255, 255, 0.16); }
   gap: 8px;
   box-shadow: var(--shadow);
   color: var(--navy);
+  cursor: pointer;
+  /* Sized to the longest message in either face, so flipping a card never
+     resizes its grid row and shoves the other cards around. */
+  min-height: 186px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.smile:active { transform: scale(0.96); }
+
+/* Flipped cards sit slightly lifted, so at a glance she can see which
+   ones she's already opened. */
+.smile.flipped {
+  box-shadow: 0 10px 22px rgba(214, 140, 160, 0.3);
+  transform: translateY(-2px);
 }
 
 .smile .ico { background: rgba(255, 255, 255, 0.7); }
@@ -527,6 +541,18 @@ body[data-theme="sunset"] .art { background: rgba(255, 255, 255, 0.16); }
   font-size: 0.85rem;
   font-weight: 600;
   line-height: 1.4;
+  transition: opacity 0.2s ease;
+}
+
+.smile .txt.fading { opacity: 0; }
+
+.hint {
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.45;
+  margin-top: 2px;
 }
 
 .c-pink   { background: #FFE0EA; }

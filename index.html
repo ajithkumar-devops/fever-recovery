@@ -149,18 +149,18 @@
 <!-- ══ 7 · Smile cards ═════════════════════════════════ -->
 <section class="screen" id="s7" data-theme="blush" aria-label="Need a little smile">
   <h2 class="title">Need a Little Smile?</h2>
-  <p class="sub">A few things that are waiting for you. ♡</p>
+  <p class="sub">Tap each one — there's something underneath. ♡</p>
 
-  <!-- Static cards — the text is filled from SMILES in script.js, in this order.
-       Plain divs, not buttons: nothing here is tappable any more. -->
-  <ul class="cards" id="cards">
-    <li class="smile c-pink"><span class="ico" aria-hidden="true">🍫</span><span class="txt"></span></li>
-    <li class="smile c-yellow"><span class="ico" aria-hidden="true">🧸</span><span class="txt"></span></li>
-    <li class="smile c-peach"><span class="ico" aria-hidden="true">🌍</span><span class="txt"></span></li>
-    <li class="smile c-mint"><span class="ico" aria-hidden="true">📝</span><span class="txt"></span></li>
-    <li class="smile c-green"><span class="ico" aria-hidden="true">🙃</span><span class="txt"></span></li>
-    <li class="smile c-purple"><span class="ico" aria-hidden="true">🏆</span><span class="txt"></span></li>
-  </ul>
+  <!-- Text is filled from CARDS in script.js, in this order.
+       Buttons again, because each card now hides a second message. -->
+  <div class="cards" id="cards">
+    <button class="smile c-pink"   type="button" aria-pressed="false"><span class="ico" aria-hidden="true">🍫</span><span class="txt"></span><span class="hint" aria-hidden="true">tap ♡</span></button>
+    <button class="smile c-yellow" type="button" aria-pressed="false"><span class="ico" aria-hidden="true">🧸</span><span class="txt"></span><span class="hint" aria-hidden="true">tap ♡</span></button>
+    <button class="smile c-peach"  type="button" aria-pressed="false"><span class="ico" aria-hidden="true">🌍</span><span class="txt"></span><span class="hint" aria-hidden="true">tap ♡</span></button>
+    <button class="smile c-mint"   type="button" aria-pressed="false"><span class="ico" aria-hidden="true">📝</span><span class="txt"></span><span class="hint" aria-hidden="true">tap ♡</span></button>
+    <button class="smile c-green"  type="button" aria-pressed="false"><span class="ico" aria-hidden="true">🙃</span><span class="txt"></span><span class="hint" aria-hidden="true">tap ♡</span></button>
+    <button class="smile c-purple" type="button" aria-pressed="false"><span class="ico" aria-hidden="true">🏆</span><span class="txt"></span><span class="hint" aria-hidden="true">tap ♡</span></button>
+  </div>
 
   <button class="cta" data-goto="s8">Next →</button>
 </section>
