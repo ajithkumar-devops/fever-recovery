@@ -1,108 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#fff6f7">
-<title>Theju's Little Recovery Corner 🌷</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fff6f8">
+<title>Theju's Little Recovery Corner ♥</title>
 <link rel="icon" href="assets/favicon.svg">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="petals" aria-hidden="true">
-  <span style="--x:5%;--d:0s">🌸</span><span style="--x:17%;--d:2s">🍃</span>
-  <span style="--x:32%;--d:5s">🌷</span><span style="--x:71%;--d:1s">🌸</span>
-  <span style="--x:88%;--d:4s">🍃</span><span style="--x:94%;--d:7s">🌷</span>
-</div>
+<div class="petals" aria-hidden="true"></div>
 
-<main class="site">
-  <section class="screen active" id="welcome">
-    <div class="illustration-frame"><img src="assets/hero.svg" alt="A girl resting in bed with a cat"></div>
-    <p class="eyebrow">A tiny place made to make you smile</p>
-    <h1>Theju's<br><em>Little Recovery Corner</em></h1>
-    <p class="lead">A tiny place to rest, smile a little,<br>and forget everything else for a while. ♡</p>
-    <button class="pink-btn" data-next="restday">Let's Begin <b>→</b></button>
+<main class="app">
+  <div class="progress"><span id="progressBar"></span></div>
+
+  <section class="screen active" data-index="0" id="s0">
+    <img src="assets/01-welcome.jpg" alt="Theju's Little Recovery Corner">
+    <button class="hotspot main" data-next="1" aria-label="Let's begin"></button>
   </section>
 
-  <section class="screen" id="restday">
-    <div class="illustration-frame"><img src="assets/resting.svg" alt="Theju resting with a warm drink"></div>
-    <h2>Hey Theju <span>♡</span></h2>
-    <p class="lead">You're officially not allowed<br>to be productive today.</p>
-    <div class="checklist">
-      <p>☕ Warm drink <b>✓</b></p><p>🛏️ More rest <b>✓</b></p><p>😊 Happy you <b>✓</b></p>
+  <section class="screen" data-index="1" id="s1">
+    <img src="assets/02-rest.jpg" alt="Hey Theju">
+    <button class="hotspot main" data-next="2" aria-label="Show me more"></button>
+  </section>
+
+  <section class="screen" data-index="2" id="s2">
+    <img src="assets/03-prescription.jpg" alt="Your daily prescription">
+    <button class="hotspot main" id="dose" aria-label="Give me another dose"></button>
+    <button class="hotspot secondary" data-next="3" aria-label="I'm feeling better"></button>
+    <div class="toast" id="doseToast"></div>
+  </section>
+
+  <section class="screen game-screen" data-index="3" id="s3">
+    <img src="assets/04-game.jpg" alt="Catch the Hearts">
+    <div class="game-layer" id="gameLayer"></div>
+    <div class="game-hud"><span>TIME <b id="time">20</b></span><span>SCORE <b id="score">0</b></span><span>BEST <b id="best">0</b></span></div>
+    <button class="game-start" id="play">Start game →</button>
+    <p class="game-help">Tap the hearts before they disappear!</p>
+  </section>
+
+  <section class="screen" data-index="4" id="s4">
+    <img src="assets/05-result.jpg" alt="You caught the hearts">
+    <button class="hotspot main" data-next="5" aria-label="What's next"></button>
+  </section>
+
+  <section class="screen" data-index="5" id="s5">
+    <img src="assets/06-company.jpg" alt="If I were there right now">
+    <button class="hotspot main" data-next="6" aria-label="That's so sweet"></button>
+  </section>
+
+  <section class="screen" data-index="6" id="s6">
+    <img src="assets/07-smile.jpg" alt="Need a little smile">
+    <div class="card-hotspots">
+      <button data-msg="You're stronger than this little fever. 🌸"></button>
+      <button data-msg="Coughs are temporary, but your smile is permanent. ♥"></button>
+      <button data-msg="You're doing your best. That's enough. ☀️"></button>
+      <button data-msg="No overthinking. Doctor's orders. 😌"></button>
+      <button data-msg="Your rest today is a brighter you tomorrow. 🍃"></button>
+      <button data-msg="Proud of you for taking care of yourself. 🫶"></button>
     </div>
-    <button class="pink-btn" data-next="prescription">Okay! Show me more →</button>
+    <div class="message-pop" id="messagePop"></div>
+    <button class="hotspot main hidden" id="nightNext" data-next="7" aria-label="One last thing"></button>
   </section>
 
-  <section class="screen" id="prescription">
-    <div class="pill-illustration">💊</div>
-    <p class="eyebrow">Your very official prescription</p>
-    <h2>Your Daily<br>Prescription <span>♥</span></h2>
-    <p class="sub">Tap the button for a dose of happiness!</p>
-    <div class="note-card" id="prescriptionCard">
-      <span>💗</span><p id="prescriptionText">Today you have full permission<br>to ignore everyone.</p>
-      <small>— Dr. Ajith 😌</small>
-    </div>
-    <button class="pink-btn" id="dose">Give me another dose 💊</button>
-    <button class="text-btn" data-next="hearts">I'm feeling a little better →</button>
+  <section class="screen" data-index="7" id="s7">
+    <img src="assets/08-night.jpg" alt="Now put the phone down">
+    <button class="hotspot main" data-next="8" aria-label="Okay I'll rest"></button>
   </section>
 
-  <section class="screen" id="hearts">
-    <p class="eyebrow">Tiny distraction</p>
-    <h2>Catch the Hearts <span>♥</span></h2>
-    <p class="sub">Tap the hearts before they disappear!</p>
-    <div class="game-info"><span>TIME <b id="time">20</b></span><span>SCORE <b id="score">0</b></span><span>BEST <b id="best">0</b></span></div>
-    <div class="sky-game" id="game">
-      <div class="game-cloud">☁️　☁️</div><img class="game-character" src="assets/game.svg" alt="">
-      <span class="ready">You can do it! ♡</span>
-    </div>
-    <button class="pink-btn" id="play">Start game →</button>
-    <p class="game-result" id="result"></p>
-    <button class="pink-btn hidden" id="afterGame">Okay… one more thing →</button>
+  <section class="screen" data-index="8" id="s8">
+    <img src="assets/09-good.jpg" alt="Good girl">
+    <button class="hotspot main" data-next="9" aria-label="Rest today"></button>
   </section>
 
-  <section class="screen" id="company">
-    <p class="eyebrow">If I were there right now...</p>
-    <h2>I'd bring you<br>a little comfort <span>♡</span></h2>
-    <div class="illustration-frame comfort-frame"><img src="assets/company.svg" alt="Warm drink and a cat"></div>
-    <div class="comfort-list">
-      <p>☕ I'd bring you something warm.</p>
-      <p>🌼 I'd make sure you actually rest.</p>
-      <p>😂 I'd annoy you just enough to make you smile.</p>
-      <p>🫶 I'd sit next to you and keep you company.</p>
-    </div>
-    <p class="soft">Until then, this little website will have to do. ♡</p>
-    <button class="pink-btn" data-next="cards">Need a little smile? →</button>
-  </section>
-
-  <section class="screen" id="cards">
-    <p class="eyebrow">Pick one</p>
-    <h2>Need a Little Smile? <span>♥</span></h2>
-    <p class="sub">Tap a card for a random message!</p>
-    <div class="message-grid">
-      <button data-message="You're doing better than you think. 🌸"><b>🌸</b><span>Tap me</span></button>
-      <button data-message="Coughs are temporary, but your smile is permanent. ♡"><b>♡</b><span>Tap me</span></button>
-      <button data-message="No overthinking. Doctor's orders. 😌"><b>☀️</b><span>Tap me</span></button>
-      <button data-message="Proud of you for taking care of yourself. 🫶"><b>🌈</b><span>Tap me</span></button>
-      <button data-message="Your rest today is a brighter you tomorrow. 🍃"><b>🍃</b><span>Tap me</span></button>
-      <button data-message="One little smile. That's today's homework. 😌"><b>😊</b><span>Tap me</span></button>
-    </div>
-    <div class="message-result" id="messageResult"></div>
-    <button class="pink-btn hidden" id="nightBtn">One last thing →</button>
-  </section>
-
-  <section class="screen night" id="night">
-    <div class="stars">✦　·　✧　　·　✦　·　✧</div>
-    <div class="illustration-frame night-frame"><img src="assets/night.svg" alt="Girl sleeping peacefully with a cat"></div>
-    <p class="eyebrow">Before you sleep</p>
-    <h2>Now Put the<br>Phone Down <span>♥</span></h2>
-    <p class="lead">Close your eyes.<br>Take a slow breath.<br>You don't have to do anything tonight.</p>
-    <p class="night-copy">Just rest and let yourself get better. ♡</p>
-    <button class="pink-btn" id="restBtn">Okay, I'll rest ♥</button>
-    <div class="final hidden" id="final"><div>♥</div><h2>Good girl. ♥</h2><p>Now actually do it. 😭</p><small>Take care, Theju.<br>You've got this. ♡</small></div>
+  <section class="screen" data-index="9" id="s9">
+    <img src="assets/10-final.jpg" alt="Thank you for visiting my little corner">
+    <button class="restart" id="restart">Come back anytime ♡</button>
   </section>
 </main>
-<footer>Made with a little too much care by Ajith ♥</footer>
+
 <script src="script.js"></script>
 </body>
 </html>

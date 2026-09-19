@@ -1,15 +1,101 @@
-const screens=[...document.querySelectorAll(".screen")];let current="welcome";
-function show(id){const n=document.getElementById(id);if(!n||id===current)return;screens.forEach(x=>x.classList.remove("active"));n.classList.add("active");current=id;window.scrollTo({top:0,behavior:"smooth"});burst(5)}
+const screens=[...document.querySelectorAll(".screen")];
+const progress=document.getElementById("progressBar");
+let current=0;
+
+function show(index){
+  current=Number(index);
+  screens.forEach((s,i)=>s.classList.toggle("active",i===current));
+  progress.style.width=((current+1)/screens.length*100)+"%";
+  window.scrollTo({top:0,behavior:"smooth"});
+  petals(4);
+}
 document.querySelectorAll("[data-next]").forEach(b=>b.addEventListener("click",()=>show(b.dataset.next)));
-function burst(n=5){for(let i=0;i<n;i++){const x=document.createElement("span");x.textContent=Math.random()>.25?"♥":"✦";x.style.cssText=`position:fixed;left:${40+Math.random()*20}%;top:${45+Math.random()*15}%;z-index:9;color:#ed6688;pointer-events:none;font-size:${15+Math.random()*12}px;animation:fly .9s ease-out forwards;`;document.body.appendChild(x);setTimeout(()=>x.remove(),1000)}}
-const rx=["Today you have full permission to ignore everyone.","Prescription: one stupid joke immediately. 😂","Your cough has officially been reported to HR. Please cooperate. 😭","Doctor's orders: water, rest and absolutely zero overthinking. 😌","Side effect of resting: you might accidentally feel better. 🌷"];let ri=0;
-document.getElementById("dose").onclick=()=>{document.getElementById("prescriptionText").innerHTML=rx[ri++%rx.length].replace("😂","😂");document.getElementById("prescriptionCard").animate([{transform:"rotate(-1deg) scale(.96)"},{transform:"rotate(1deg) scale(1.03)"},{transform:"rotate(-1deg) scale(1)"}],{duration:450});burst(4)};
-let taps=0;document.querySelectorAll(".message-grid button").forEach(b=>b.onclick=()=>{document.getElementById("messageResult").textContent=b.dataset.message;b.animate([{transform:"scale(.96)"},{transform:"scale(1.04)"},{transform:"scale(1)"}],{duration:300});if(++taps>=2)document.getElementById("nightBtn").classList.remove("hidden");burst(3)});
-document.getElementById("nightBtn").onclick=()=>show("night");
 
-let score=0,time=20,timer,spawner,best=Number(localStorage.getItem("thejuBest")||0);document.getElementById("best").textContent=best;const game=document.getElementById("game");
-function spawn(){const b=document.createElement("button");b.className="target";b.textContent=Math.random()>.2?"❤️":"💗";b.style.left=5+Math.random()*88+"%";b.style.top=7+Math.random()*78+"%";b.onclick=()=>{score++;document.getElementById("score").textContent=score;b.remove();burst(1)};game.appendChild(b);setTimeout(()=>b.remove(),850)}
-document.getElementById("play").onclick=()=>{clearInterval(timer);clearInterval(spawner);score=0;time=20;document.getElementById("score").textContent=0;document.getElementById("time").textContent=20;document.getElementById("result").textContent="";game.querySelector(".ready")?.remove();const btn=document.getElementById("play");btn.disabled=true;btn.textContent="Catch them! ❤️";spawner=setInterval(spawn,500);timer=setInterval(()=>{time--;document.getElementById("time").textContent=time;if(time<=0){clearInterval(timer);clearInterval(spawner);game.querySelectorAll(".target").forEach(x=>x.remove());btn.disabled=false;btn.textContent="Play again →";if(score>best){best=score;localStorage.setItem("thejuBest",best);document.getElementById("best").textContent=best}document.getElementById("result").textContent=score>=10?`You caught ${score} hearts. You're doing great. 😌❤️`:`You caught ${score} hearts. That's enough smiling for today. 🥺❤️`;document.getElementById("afterGame").classList.remove("hidden");burst(10)}},1000)};
-document.getElementById("restBtn").onclick=()=>{document.getElementById("restBtn").classList.add("hidden");document.getElementById("final").classList.remove("hidden");burst(14)};
+function petals(n=5){
+  const holder=document.querySelector(".petals");
+  for(let i=0;i<n;i++){
+    const p=document.createElement("span");
+    p.className="petal"; p.textContent=Math.random()>.5?"🌸":"♥";
+    p.style.left=Math.random()*100+"%";
+    p.style.animationDelay=(Math.random()*.5)+"s";
+    holder.appendChild(p);
+    setTimeout(()=>p.remove(),8500);
+  }
+}
+petals(10);
 
-document.getElementById('afterGame').addEventListener('click',()=>show('company'));
+const rx=[
+"Today you have full permission to ignore everyone. ♥",
+"Prescription: one stupid joke immediately. 😂",
+"Your cough has officially been reported to HR. 😭",
+"Doctor's orders: water, rest and zero overthinking. 😌",
+"Side effect of resting: you might accidentally feel better. 🌷"
+];
+let ri=0;
+document.getElementById("dose").addEventListener("click",()=>{
+  const t=document.getElementById("doseToast");
+  t.textContent=rx[ri++%rx.length];
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),1800);
+  petals(5);
+});
+
+let score=0,time=20,timer=null,spawner=null;
+let best=Number(localStorage.getItem("thejuRecoveryBest")||0);
+document.getElementById("best").textContent=best;
+const layer=document.getElementById("gameLayer");
+const timeEl=document.getElementById("time"),scoreEl=document.getElementById("score");
+
+function spawnHeart(){
+  const b=document.createElement("button");
+  b.className="game-heart";
+  b.textContent=Math.random()>.2?"♥":"💗";
+  b.style.left=(12+Math.random()*75)+"%";
+  b.style.top=(24+Math.random()*45)+"%";
+  b.addEventListener("click",()=>{
+    score++;
+    scoreEl.textContent=score;
+    b.remove();
+  });
+  layer.appendChild(b);
+  setTimeout(()=>b.remove(),950);
+}
+function finishGame(){
+  clearInterval(timer);clearInterval(spawner);
+  layer.querySelectorAll(".game-heart").forEach(x=>x.remove());
+  if(score>best){best=score;localStorage.setItem("thejuRecoveryBest",best);document.getElementById("best").textContent=best}
+  document.getElementById("play").disabled=false;
+  document.getElementById("play").textContent="Play again ↻";
+  const box=document.createElement("div");
+  box.className="game-finished";
+  box.innerHTML=`<div><strong>${score>=10?"Yay! 🎉":"Aww! ♥"}</strong>You caught ${score} hearts!<br><small>${score>=10?"That's amazing.":"That's enough smiling for today."}</small><br><button id="continueGame" class="game-start" style="position:static;margin-top:14px;height:44px">What's next? →</button></div>`;
+  layer.appendChild(box);
+  document.getElementById("continueGame").addEventListener("click",()=>{box.remove();show(5)});
+}
+document.getElementById("play").addEventListener("click",()=>{
+  layer.querySelectorAll(".game-finished,.game-heart").forEach(x=>x.remove());
+  score=0;time=20;scoreEl.textContent=0;timeEl.textContent=20;
+  const btn=document.getElementById("play");btn.disabled=true;btn.textContent="Catch them! ♥";
+  spawner=setInterval(spawnHeart,520);
+  timer=setInterval(()=>{
+    time--;timeEl.textContent=time;
+    if(time<=0)finishGame();
+  },1000);
+});
+
+let cardTaps=0;
+document.querySelectorAll(".card-hotspots button").forEach(b=>b.addEventListener("click",()=>{
+  const pop=document.getElementById("messagePop");
+  pop.textContent=b.dataset.msg;pop.classList.add("show");
+  cardTaps++;
+  setTimeout(()=>pop.classList.remove("show"),1800);
+  if(cardTaps>=2)document.getElementById("nightNext").classList.remove("hidden");
+  petals(4);
+}));
+
+document.getElementById("restart").addEventListener("click",()=>{
+  cardTaps=0;
+  document.getElementById("nightNext").classList.add("hidden");
+  show(0);
+});
+show(0);
