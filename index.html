@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#fff6f7">
+<title>Theju's Little Recovery Corner 🌷</title>
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="petals" aria-hidden="true">
+  <span style="--x:5%;--d:0s">🌸</span><span style="--x:17%;--d:2s">🍃</span>
+  <span style="--x:32%;--d:5s">🌷</span><span style="--x:71%;--d:1s">🌸</span>
+  <span style="--x:88%;--d:4s">🍃</span><span style="--x:94%;--d:7s">🌷</span>
+</div>
+
+<main class="site">
+  <section class="screen active" id="welcome">
+    <div class="hero-art">
+      <div class="cloud cloud-a">☁</div><div class="cloud cloud-b">☁</div>
+      <div class="flower f-a">🌸</div><div class="flower f-b">🌷</div>
+      <div class="bed-art">
+        <div class="hair"></div><div class="head"><i></i><i></i><b>⌣</b></div>
+        <div class="blanket"></div><div class="cat-art">🐱</div>
+      </div>
+    </div>
+    <p class="eyebrow">A tiny place made to make you smile</p>
+    <h1>Theju's<br><em>Little Recovery Corner</em></h1>
+    <p class="lead">A tiny place to rest, smile a little,<br>and forget everything else for a while. ♡</p>
+    <button class="pink-btn" data-next="restday">Let's Begin <b>→</b></button>
+  </section>
+
+  <section class="screen" id="restday">
+    <div class="portrait-art">
+      <div class="window">☀️</div><div class="plant">🌿</div>
+      <div class="girl"><div class="girl-hair"></div><div class="girl-head"><i></i><i></i><b>⌣</b></div><div class="cup">☕</div></div>
+      <div class="mini-cat">🐱</div>
+    </div>
+    <h2>Hey Theju <span>♡</span></h2>
+    <p class="lead">You're officially not allowed<br>to be productive today.</p>
+    <div class="checklist">
+      <p>☕ Warm drink <b>✓</b></p><p>🛏️ More rest <b>✓</b></p><p>😊 Happy you <b>✓</b></p>
+    </div>
+    <button class="pink-btn" data-next="prescription">Okay! Show me more →</button>
+  </section>
+
+  <section class="screen" id="prescription">
+    <div class="pill-illustration">💊</div>
+    <p class="eyebrow">Your very official prescription</p>
+    <h2>Your Daily<br>Prescription <span>♥</span></h2>
+    <p class="sub">Tap the button for a dose of happiness!</p>
+    <div class="note-card" id="prescriptionCard">
+      <span>💗</span><p id="prescriptionText">Today you have full permission<br>to ignore everyone.</p>
+      <small>— Dr. Ajith 😌</small>
+    </div>
+    <button class="pink-btn" id="dose">Give me another dose 💊</button>
+    <button class="text-btn" data-next="hearts">I'm feeling a little better →</button>
+  </section>
+
+  <section class="screen" id="hearts">
+    <p class="eyebrow">Tiny distraction</p>
+    <h2>Catch the Hearts <span>♥</span></h2>
+    <p class="sub">Tap the hearts before they disappear!</p>
+    <div class="game-info"><span>TIME <b id="time">20</b></span><span>SCORE <b id="score">0</b></span><span>BEST <b id="best">0</b></span></div>
+    <div class="sky-game" id="game">
+      <div class="game-cloud">☁️　☁️</div><div class="game-girl">♡</div>
+      <span class="ready">You can do it! ♡</span>
+    </div>
+    <button class="pink-btn" id="play">Start game →</button>
+    <p class="game-result" id="result"></p>
+  </section>
+
+  <section class="screen" id="company">
+    <p class="eyebrow">If I were there right now...</p>
+    <h2>I'd bring you<br>a little comfort <span>♡</span></h2>
+    <div class="comfort-art"><div class="mug">☕</div><div class="heart-outline">♡</div><div class="small-cat">🐱</div></div>
+    <div class="comfort-list">
+      <p>☕ I'd bring you something warm.</p>
+      <p>🌼 I'd make sure you actually rest.</p>
+      <p>😂 I'd annoy you just enough to make you smile.</p>
+      <p>🫶 I'd sit next to you and keep you company.</p>
+    </div>
+    <p class="soft">Until then, this little website will have to do. ♡</p>
+    <button class="pink-btn" data-next="cards">Need a little smile? →</button>
+  </section>
+
+  <section class="screen" id="cards">
+    <p class="eyebrow">Pick one</p>
+    <h2>Need a Little Smile? <span>♥</span></h2>
+    <p class="sub">Tap a card for a random message!</p>
+    <div class="message-grid">
+      <button data-message="You're doing better than you think. 🌸"><b>🌸</b><span>Tap me</span></button>
+      <button data-message="Coughs are temporary, but your smile is permanent. ♡"><b>♡</b><span>Tap me</span></button>
+      <button data-message="No overthinking. Doctor's orders. 😌"><b>☀️</b><span>Tap me</span></button>
+      <button data-message="Proud of you for taking care of yourself. 🫶"><b>🌈</b><span>Tap me</span></button>
+      <button data-message="Your rest today is a brighter you tomorrow. 🍃"><b>🍃</b><span>Tap me</span></button>
+      <button data-message="One little smile. That's today's homework. 😌"><b>😊</b><span>Tap me</span></button>
+    </div>
+    <div class="message-result" id="messageResult"></div>
+    <button class="pink-btn hidden" id="nightBtn">One last thing →</button>
+  </section>
+
+  <section class="screen night" id="night">
+    <div class="stars">✦　·　✧　　·　✦　·　✧</div>
+    <div class="moon-art">☾</div>
+    <p class="eyebrow">Before you sleep</p>
+    <h2>Now Put the<br>Phone Down <span>♥</span></h2>
+    <p class="lead">Close your eyes.<br>Take a slow breath.<br>You don't have to do anything tonight.</p>
+    <p class="night-copy">Just rest and let yourself get better. ♡</p>
+    <button class="pink-btn" id="restBtn">Okay, I'll rest ♥</button>
+    <div class="final hidden" id="final"><div>♥</div><h2>Good girl. ♥</h2><p>Now actually do it. 😭</p><small>Take care, Theju.<br>You've got this. ♡</small></div>
+  </section>
+</main>
+<footer>Made with a little too much care by Ajith ♥</footer>
+<script src="script.js"></script>
+</body>
+</html>
