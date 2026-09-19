@@ -321,7 +321,9 @@ body[data-theme="sunset"] .art { background: rgba(255, 255, 255, 0.16); }
   box-shadow: var(--shadow);
   padding: 30px 24px;
   margin: 20px 0 14px;
-  min-height: 9.5em;
+  /* Sized to the longest dose so the card doesn't resize between taps —
+     otherwise "Give me another dose" jumps under her thumb mid-tap. */
+  min-height: 15.5em;
   display: grid;
   place-items: center;
 }

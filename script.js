@@ -11,21 +11,23 @@ const GAME_SECONDS  = 30;
 // She'll see every one of these before any repeats, so they can carry weight.
 const PRESCRIPTIONS = [
   "I can't see those beautiful eyes turning red, and that smile hiding under a mask.",
-  "I've counted every single day of this. I'm still counting.",
   "Tell me honestly how you're feeling. Not the \"I'm fine\" version. The real one.",
   "I wish I could take this from you and carry it myself for a day.",
-  "Did you eat? Actually eat — not the answer you give so I stop asking.",
   "I'm worried about you. That's not me being dramatic, that's just where my head is.",
   "If it gets worse tonight, wake me up. I mean it. Any hour.",
-  "You keep saying it's nothing. It's been days now. It isn't nothing.",
-  "Please see a doctor if this doesn't turn around. Do that one for me.",
   "I don't need you to be okay right now. I just need you to let yourself heal.",
-  "Heartbeat will still be there when you're better. So will I.",
   "Drink water. Take the medicine. Text me when you've done both.",
   "Your favourite hobby is pushing me into trauma — and I'd take a hundred rounds of it over one more day of you like this.",
-  "You don't have to be strong or cheerful for me today. Just be horizontal.",
   "Every time my phone lights up I hope it's you saying you feel better.",
-  "Being unwell is not something to apologise for. Stop doing it.",
+
+  // The "waiting" running joke — keep adding to this, it's the funniest seam.
+  "New Heartbeat episodes are waiting. They are not going to watch themselves.",
+  "The chocolates are waiting. I am guarding them. Barely.",
+  "Your toys are waiting. Two of them asked about you.",
+  "The whole world is waiting for you. (I am the whole world. Obviously.)",
+  "Your pending arguments with me are waiting. I've kept a list. It's long.",
+  "The trauma you keep pushing me into is also waiting. Very patiently.",
+  "I have been undefeated in arguments for days now. It's boring. Please come back.",
 ];
 
 // Screen 7 — the smile cards.
