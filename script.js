@@ -19,15 +19,6 @@ const PRESCRIPTIONS = [
   "Drink water. Take the medicine. Text me when you've done both.",
   "Your favourite hobby is pushing me into trauma — and I'd take a hundred rounds of it over one more day of you like this.",
   "Every time my phone lights up I hope it's you saying you feel better.",
-
-  // The "waiting" running joke — keep adding to this, it's the funniest seam.
-  "New Heartbeat episodes are waiting. They are not going to watch themselves.",
-  "The chocolates are waiting. I am guarding them. Barely.",
-  "Your toys are waiting. Two of them asked about you.",
-  "The whole world is waiting for you. (I am the whole world. Obviously.)",
-  "Your pending arguments with me are waiting. I've kept a list. It's long.",
-  "The trauma you keep pushing me into is also waiting. Very patiently.",
-  "I have been undefeated in arguments for days now. It's boring. Please come back.",
 ];
 
 // Screen 7 — the smile cards.
@@ -45,6 +36,15 @@ const SMILES = [
   "I miss you being annoying. Come back. ♡",
   "This will pass. I'll still be here after. ♡",
   "Go back to sleep. I'll wait. ♡",
+
+  // The "waiting" running joke — keep adding to this, it's the funniest seam.
+  "New Heartbeat episodes are waiting. They are not going to watch themselves.",
+  "The chocolates are waiting. I am guarding them. Barely.",
+  "Your toys are waiting. Two of them asked about you.",
+  "The whole world is waiting for you. (I am the whole world. Obviously.)",
+  "Your pending arguments with me are waiting. I've kept a list. It's long.",
+  "The trauma you keep pushing me into is also waiting. Very patiently.",
+  "I have been undefeated in arguments for days now. It's boring. Please come back.",
 ];
 
 /* ═══════════════════════════════════════════════════════════
