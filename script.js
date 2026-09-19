@@ -7,21 +7,29 @@ const SICK_START = '2026-09-14';   // the day she got sick, YYYY-MM-DD
 const RECOVERY_DAYS = 7;           // the arc the "Good Health Loading" bar fills over
 const GAME_SECONDS  = 30;
 
-// Screen 3 — the prescription doses. Rewrite these in your voice.
+// Screen 3 — the prescription doses.
+// She'll see every one of these before any repeats, so they can carry weight.
 const PRESCRIPTIONS = [
-  "Today you have full permission to ignore everyone.",
   "I can't see those beautiful eyes turning red, and that smile hiding under a mask.",
-  "Prescribed: one episode of Heartbeat and zero guilt about it.",
-  "Naps are not laziness today. They're treatment.",
-  "You are allowed to reply to exactly nobody.",
-  "Drink the water. Yes, now. I will know.",
-  "Whatever this is, it's temporary. You're not.",
-  "Dose: one blanket, one warm drink, zero responsibilities.",
-  "Your favourite hobby is pushing me into trauma — get well soon so you can resume.",
-  "Being unwell is not a personality flaw. Stop apologising for it.",
+  "I've counted every single day of this. I'm still counting.",
+  "Tell me honestly how you're feeling. Not the \"I'm fine\" version. The real one.",
+  "I wish I could take this from you and carry it myself for a day.",
+  "Did you eat? Actually eat — not the answer you give so I stop asking.",
+  "I'm worried about you. That's not me being dramatic, that's just where my head is.",
+  "If it gets worse tonight, wake me up. I mean it. Any hour.",
+  "You keep saying it's nothing. It's been days now. It isn't nothing.",
+  "Please see a doctor if this doesn't turn around. Do that one for me.",
+  "I don't need you to be okay right now. I just need you to let yourself heal.",
+  "Heartbeat will still be there when you're better. So will I.",
+  "Drink water. Take the medicine. Text me when you've done both.",
+  "Your favourite hobby is pushing me into trauma — and I'd take a hundred rounds of it over one more day of you like this.",
+  "You don't have to be strong or cheerful for me today. Just be horizontal.",
+  "Every time my phone lights up I hope it's you saying you feel better.",
+  "Being unwell is not something to apologise for. Stop doing it.",
 ];
 
-// Screen 7 — the six smile cards, in grid order.
+// Screen 7 — the smile cards.
+// More messages than cards (6), so a tap can always find something new.
 const SMILES = [
   "You're stronger than this ♡",
   "Coughs are temporary, but your smile is permanent. ♡",
@@ -29,6 +37,12 @@ const SMILES = [
   "No overthinking. Doctor's orders. 😊",
   "Your rest today is a brighter you tomorrow. ♡",
   "Proud of you for taking care of yourself. ♡",
+  "I'm thinking about you right now. ♡",
+  "One slow day at a time. That's all. ♡",
+  "You're allowed to do absolutely nothing. ♡",
+  "I miss you being annoying. Come back. ♡",
+  "This will pass. I'll still be here after. ♡",
+  "Go back to sleep. I'll wait. ♡",
 ];
 
 /* ═══════════════════════════════════════════════════════════
@@ -57,12 +71,34 @@ function renameTo(newName, placeholder = 'Theju') {
 renameTo(HER_NAME);
 document.title = `${HER_NAME}'s Little Recovery Corner 💗`;
 
-/** Pick a random item that isn't the one currently shown, so tapping always changes something. */
-function pickDifferent(list, current) {
-  if (list.length < 2) return list[0];
-  let next;
-  do { next = list[Math.floor(Math.random() * list.length)]; } while (next === current);
-  return next;
+/**
+ * A "shuffle bag": deals every item once in random order before any repeats.
+ *
+ * Plain random picking feels broken here — with 16 doses you'd still expect to
+ * see a repeat within about five taps, which reads as "it's glitching" rather
+ * than "it's random". Dealing from a shuffled deck guarantees she reads all of
+ * them before seeing any twice.
+ */
+function makeShuffleBag(items) {
+  let bag = [];
+  let last = null;
+
+  return function draw() {
+    if (bag.length === 0) {
+      bag = items.slice();
+      for (let i = bag.length - 1; i > 0; i--) {          // Fisher–Yates
+        const j = Math.floor(Math.random() * (i + 1));
+        [bag[i], bag[j]] = [bag[j], bag[i]];
+      }
+      // A reshuffle can deal the same item she just saw, straddling the seam.
+      // Swap it away from the top so the back-to-back repeat never shows.
+      if (bag.length > 1 && bag[bag.length - 1] === last) {
+        [bag[0], bag[bag.length - 1]] = [bag[bag.length - 1], bag[0]];
+      }
+    }
+    last = bag.pop();
+    return last;
+  };
 }
 
 /** localStorage throws in some private-browsing modes — never let that kill the page. */
@@ -159,9 +195,14 @@ onEnter.s2 = () => {
 /* ── Screen 3 · Prescription ────────────────────────────── */
 
 const rxText = $('#rxText');
+const drawPrescription = makeShuffleBag(PRESCRIPTIONS);
+
+// The card starts on the first dose, so retire it from the opening deal —
+// otherwise her first tap can hand straight back what she's already reading.
+rxText.textContent = drawPrescription();
 
 $('#rxBtn').addEventListener('click', () => {
-  const next = pickDifferent(PRESCRIPTIONS, rxText.textContent);
+  const next = drawPrescription();
   rxText.classList.add('fading');
   setTimeout(() => {
     rxText.textContent = next;
@@ -268,12 +309,30 @@ $('#skipGame').addEventListener('click', () => {
 
 /* ── Screen 7 · Smile cards ─────────────────────────────── */
 
-$$('.smile').forEach((card, i) => {
+const smileCards = $$('.smile');
+
+/**
+ * What each card is committed to showing.
+ *
+ * Deliberately NOT read from the DOM: the new text only lands after the 250ms
+ * fade, so two cards tapped in quick succession would both read the same stale
+ * text and could pick the same replacement. Committing here, synchronously on
+ * click, closes that window.
+ */
+const assigned = smileCards.map((_, i) => SMILES[i] || 'Tap me');
+
+smileCards.forEach((card, i) => {
   const txt = card.querySelector('.txt');
-  txt.textContent = SMILES[i] || 'Tap me';
+  txt.textContent = assigned[i];
 
   card.addEventListener('click', () => {
-    const next = pickDifferent(SMILES, txt.textContent);
+    const spare = SMILES.filter((m) => !assigned.includes(m));
+    // If the pool is ever exhausted, fall back to any other message rather
+    // than freezing the card on its current one.
+    const pool = spare.length ? spare : SMILES.filter((m) => m !== assigned[i]);
+    const next = pool[Math.floor(Math.random() * pool.length)];
+    assigned[i] = next;
+
     txt.classList.add('fading');
     setTimeout(() => {
       txt.textContent = next;
